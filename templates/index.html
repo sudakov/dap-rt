@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Анализ теста рисунок человека</title>
+</head>
+<body>
+    <h2>Загрузить рисунок</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <input type="submit" value="Загрузить">
+    </form>
+
+    <h2>Список рисунков</h2>
+    <table border="1" style="border-collapse: collapse; width: 80%;">
+        <thead>
+            <tr>
+                <th>Рисунок</th>
+                <th>Вопрос</th>
+                <th>Ответ</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for img in images %}
+            <tr>
+                <td>
+                    <img src="{{ url_for('get_image', image_id=img.id) }}" width="200">
+                </td>
+                <td>
+                    {{ img.question if img.question else '' }}
+                </td>
+                <td>
+                    {{ img.answer if img.answer else '' }}
+                </td>
+                <td>
+                    <a href="{{ url_for('ask', image_id=img.id) }}">
+                        <button type="button">Задать вопрос</button>
+                    </a>
+                    <form method="POST" action="{{ url_for('delete_image', image_id=img.id) }}" style="display:inline;">
+                        <input type="submit" value="Удалить" onclick="return confirm('Вы уверены?')">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
